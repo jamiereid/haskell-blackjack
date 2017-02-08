@@ -1,6 +1,7 @@
 module Card where
 
 import Data.Char
+import Data.Tuple (swap)
 
 data Suit = Spades
           | Hearts
@@ -41,22 +42,30 @@ data Rank = Ace
           | One
           deriving (Eq, Ord, Show)
 
--- | Returns a [Char] representation of a Rank.
-rankToChar :: Rank -> [Char]
-rankToChar Ace   = "A"
-rankToChar King  = "K"
-rankToChar Queen = "Q"
-rankToChar Jack  = "J"
-rankToChar Ten   = "10"
-rankToChar Nine  = "9"
-rankToChar Eight = "8"
-rankToChar Seven = "7"
-rankToChar Six   = "6"
-rankToChar Five  = "5"
-rankToChar Four  = "4"
-rankToChar Three = "3"
-rankToChar Two   = "2"
-rankToChar One   = "1"
+rankList :: [(Char, Rank)]
+rankList = [('a', Ace)
+           ,('k', King)
+           ,('q', Queen)
+           ,('j', Jack)
+           ,('t', Ten)
+           ,('9', Nine)
+           ,('8', Eight)
+           ,('7', Seven)
+           ,('6', Six)
+           ,('5', Five)
+           ,('4', Four)
+           ,('3', Three)
+           ,('2', Two)
+           ,('1', One)
+           ]
+
+-- | Returns a Char representation of a Rank.
+rankToChar :: Rank -> Maybe Char
+rankToChar r = lookup r (map swap rankList)
+
+-- | Returns a Rank from a Char representation.
+charToRank :: Char -> Maybe Rank
+charToRank c = lookup (toLower c) rankList
            
 data Card = Card Rank Suit deriving(Show)
 
