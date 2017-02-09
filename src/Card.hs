@@ -9,22 +9,20 @@ data Suit = Spades
           | Clubs
           deriving (Eq, Show)
 
+suitList :: [(Char, Suit)]
+suitList = [('s', Spades)
+           ,('h', Hearts)
+           ,('d', Diamonds)
+           ,('c', Clubs)
+           ]
+
 -- | Returns a Char representation of a Suit.
-suitToChar :: Suit -> Char
-suitToChar Spades   = 'S'
-suitToChar Hearts   = 'H'
-suitToChar Diamonds = 'D'
-suitToChar Clubs    = 'C'
+suitToChar :: Suit -> Maybe Char
+suitToChar s = lookup s (map swap suitList)
 
 -- | Returns a Suit from a Char representation.
-charToSuit :: Char -> Suit
-charToSuit inChar
-  | upperChar == 'S' = Spades
-  | upperChar == 'H' = Hearts
-  | upperChar == 'D' = Diamonds
-  | upperChar == 'C' = Clubs
-  | otherwise        = error "Passed unexpected value to charToSuit"
-  where upperChar = toUpper inChar
+charToSuit :: Char -> Maybe Suit
+charToSuit c = lookup (toLower c) suitList
 
 data Rank = Ace
           | King
@@ -69,3 +67,14 @@ charToRank c = lookup (toLower c) rankList
            
 data Card = Card Rank Suit deriving(Show)
 
+-- | Returns a [Char] representation of a Card.
+showCard :: Card -> [Maybe Char]
+showCard (Card r s) = [rank, suit]
+  where rank = rankToChar r
+        suit = suitToChar s
+
+-- | Returns a Card from a [Char] card representation
+-- readCard :: [Char] -> Card
+-- readCard [r,s] = (Card rank suit) -- @Broken rank and suit are wrong type
+--   where rank = charToRank r
+--         suit = charToSuit s
